@@ -3,14 +3,14 @@
     // Define as CommonJS export:
     module.exports = factory(
       require('backbone'),
-      require('babel-polyfill')
+      require('promise-polyfill')
     );
   }
   else if (typeof define === 'function' && define.amd) {
     // Define as AMD:
     define([
       'backbone',
-      'babel-polyfill'
+      'promise-polyfill'
     ], factory);
   }
   else {
@@ -18,7 +18,9 @@
     factory(window.Backbone);
   }
 })((Backbone) => {
-  if (!Promise) throw new Error('ES6 Promise is not defined');
+  if (!Promise) {
+    throw new Error('ES6 Promise is not defined. To avoid this error add promise-polyfill lib to your project');
+  }
 
   Backbone.Promise = Promise;
 
