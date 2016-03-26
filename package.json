@@ -8,7 +8,17 @@
     "email": "marat.fakhreev@gmail.com"
   },
   "license": "MIT",
-  "keywords": [],
+  "keywords": [
+    "backbone",
+    "marionette",
+    "promise",
+    "override",
+    "es6",
+    "es2015",
+    "sync",
+    "model",
+    "collection"
+  ],
   "github": "https://github.com/maratfakhreev/backbone-es6-promise",
   "repository": {
     "type": "git",

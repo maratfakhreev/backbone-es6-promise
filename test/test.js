@@ -33,7 +33,7 @@ describe('backbone-es6-promise', function() {
     it('model fetch has error statement', function(done) {
       var model = new this.Model({ id: 132489 });
 
-      model.fetch().catch(function() {
+      model.fetch().catch(function(err) {
         done();
       });
     });
@@ -84,7 +84,7 @@ describe('backbone-es6-promise', function() {
       var model = new this.Model();
       model.urlRoot = root + '/fake_posts'
 
-      model.save().catch(function(data) {
+      model.save().catch(function(err) {
         done();
       });
     });
@@ -104,7 +104,7 @@ describe('backbone-es6-promise', function() {
     it('model destroy has error statement', function(done) {
       var model = new this.Model({ id: 13124 });
 
-      model.destroy().catch(function(data) {
+      model.destroy().catch(function(err) {
         done();
       });
     });
