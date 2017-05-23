@@ -9,7 +9,7 @@ Backbone ES6 promise is the simple plugin that overrides old, not trendy jQuery 
 ### How to install:
 
 ```bash
-npm install backbone-es6-promise
+npm install backbone-es6-promise --save
 ```
 
 **Browser:**
@@ -31,14 +31,11 @@ Just start to write your code with ES6 promise syntax.
 
 ```javascript
 const Model = Backbone.Model.extend({ urlRoot: 'url' });
-const model = new Model({
-  id: 1,
-  someAttribute: 'some attribute'
-});
+const model = new Model({ id: 1, someAttribute: 'some attribute' });
 
-model.fetch().then(function(data) {
+model.fetch().then(data => {
   console.log(data);
-}).catch(function(errorObject) {
+}).catch(errorObject => {
   console.log(errorObject);
 });
 ```
@@ -46,13 +43,12 @@ model.fetch().then(function(data) {
 Also you are able to write your custom promises in same style with Backbone.Promise function. Don't worry, no magic here, it is just an alias for ES6 Promise function.
 
 ```javascript
-const promise = new Backbone.Promise(function(resolve, reject) {
+const promise = new Backbone.Promise((resolve, reject) => {
   // do a something async
   if (/* everything turned out fine */) {
     resolve('Stuff worked!');
-  }
-  else {
-    reject(Error('It brokes'));
+  } else {
+    reject(Error('It broke'));
   }
 });
 ```

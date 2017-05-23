@@ -1,7 +1,7 @@
 {
   "name": "backbone-es6-promise",
   "description": "A plugin for Backbone.js that overrides default promises with modern ES6 promises",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "lib/backbone-es6-promise.js",
   "author": {
     "name": "Marat Fakhreev",
