@@ -1,71 +1,60 @@
-((factory) => {
+(factory => {
   if (typeof require === 'function' && typeof exports === 'object') {
     // Define as CommonJS export:
     module.exports = factory(
       require('backbone'),
-      require('promise-polyfill')
+      require('babel-polyfill')
     );
-  }
-  else if (typeof define === 'function' && define.amd) {
+  } else if (typeof define === 'function' && define.amd) {
     // Define as AMD:
     define([
       'backbone',
-      'promise-polyfill'
+      'babel-polyfill'
     ], factory);
-  }
-  else {
+  } else {
     // Browser:
     factory(window.Backbone);
   }
-})((Backbone) => {
+})(Backbone => {
   if (!Promise) {
-    throw new Error('ES6 Promise is not defined. To avoid this error add promise-polyfill lib to your project');
+    throw new Error('ES6 Promise is not defined. To avoid this error add "babel-polyfill" to your project');
   }
 
   Backbone.Promise = Promise;
 
-  class BackbonePromiseOverrider {
-    static overrideAll() {
-      this.overrideBackboneAjax();
-      this.overrideBackboneSync();
-      this.overrideBackboneModelSave();
-      this.overrideBackboneModelDestroy();
-    }
+  (function overrideAjax() {
+    Backbone.ajax = function() {
+      return Backbone.Promise.resolve(Backbone.$.ajax.apply(Backbone.$, arguments));
+    };
+  })();
 
-    static overrideBackboneAjax() {
-      Backbone.ajax = function() {
-        return Backbone.Promise.resolve(Backbone.$.ajax.apply(Backbone.$, arguments));
-      };
-    }
+  (function overrideSync() {
+    const originalSync = Backbone.sync;
 
-    static overrideBackboneSync() {
-      const originalSync = Backbone.sync;
+    Backbone.sync = function(method, model, options) {
+      return originalSync(method, model, options).then(() => model);
+    };
+  })();
 
-      Backbone.sync = function(method, model, options) {
-        return originalSync(method, model, options).then(() => { return model; });
-      };
-    }
+  (function overrideModelSave() {
+    const originalSave = Backbone.Model.prototype.save;
 
-    static overrideBackboneModelSave() {
-      const originalSave = Backbone.Model.prototype.save;
+    Backbone.Model.prototype.save = function() {
+      const xhr = originalSave.apply(this, arguments);
 
-      Backbone.Model.prototype.save = function() {
-        const xhr = originalSave.apply(this, arguments);
+      return xhr ? xhr : Backbone.Promise.reject(new Error('Model save error'));
+    };
+  })();
 
-        return (xhr !== false) ? xhr : Backbone.Promise.reject(new Error('Model save error'));
-      };
-    }
+  (function overrideModelDestroy() {
+    const originalDestroy = Backbone.Model.prototype.destroy;
 
-    static overrideBackboneModelDestroy() {
-      const originalDestroy = Backbone.Model.prototype.destroy;
+    Backbone.Model.prototype.destroy = function() {
+      const xhr = originalDestroy.apply(this, arguments);
 
-      Backbone.Model.prototype.destroy = function() {
-        const xhr = originalDestroy.apply(this, arguments);
+      return xhr ? xhr : Backbone.Promise.reject(new Error('Model destroy error'));
+    };
+  })();
 
-        return (xhr !== false) ? xhr : Backbone.Promise.reject(new Error('Model destroy error'));
-      };
-    }
-  }
-
-  return BackbonePromiseOverrider.overrideAll();
+  return Backbone.Promise;
 });
