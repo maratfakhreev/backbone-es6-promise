@@ -13,6 +13,6 @@ We strictly follow [Semantic Versioning](http://semver.org/)
 
 1. Make sure that tests are green.
 2. Update project version in package.json
-3. Update the changelog with the new version and commit it with message "release <version>".
-4. Tag the release by running `git tag v<version>`. Push the tag: `git push --tags`.
-5. Verify that everything was pushed correctly on the Github: https://github.com/maratfakhreev/backbone-es6-promise/releases
+3. Tag the release by running `git tag v<version>`. Push the tag: `git push --tags`.
+4. Verify that everything was pushed correctly on the Github: https://github.com/maratfakhreev/backbone-es6-promise/releases
+5. Run `npm publish`
